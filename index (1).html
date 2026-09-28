@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#087f3e">
+  <meta name="description" content="JB SMART SELLER — simple tools for Nigerian sellers to manage profits, adverts, WhatsApp sales, receipts, customers and sales.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png" type="image/png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>JB SMART SELLER</title>
+
+  <style>
+    :root{
+      --green:#087f3e;
+      --green-dark:#075c2e;
+      --green-light:#eaf8f0;
+      --bg:#f4f7f5;
+      --card:#ffffff;
+      --text:#183028;
+      --muted:#6c7a74;
+      --danger:#c62828;
+      --border:#dfe8e3;
+      --shadow:0 8px 24px rgba(8,127,62,.08);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.5;
+    }
+    button,input,textarea{font:inherit}
+    button{cursor:pointer}
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      background:linear-gradient(135deg,var(--green),#11a957);
+      color:#fff;
+      box-shadow:0 5px 18px rgba(0,0,0,.12);
+    }
+    .topbar-inner{
+      max-width:1200px;
+      margin:auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:11px;
+      font-weight:800;
+      letter-spacing:.3px;
+    }
+    .brand img{
+      width:44px;
+      height:44px;
+      border-radius:11px;
+      object-fit:cover;
+      background:#fff;
+    }
+    .brand-text small{
+      display:block;
+      font-size:11px;
+      opacity:.85;
+      font-weight:500;
+    }
+
+    nav{
+      max-width:1200px;
+      margin:auto;
+      padding:0 18px 12px;
+      display:flex;
+      gap:8px;
+      overflow-x:auto;
+      scrollbar-width:none;
+    }
+    nav::-webkit-scrollbar{display:none}
+    nav button{
+      flex:0 0 auto;
+      border:0;
+      border-radius:999px;
+      padding:9px 13px;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      font-weight:700;
+    }
+    nav button:hover{background:rgba(255,255,255,.23)}
+
+    .container{
+      max-width:1200px;
+      margin:auto;
+      padding:24px 18px 50px;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,#ffffff,#f0faf4);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:25px;
+      box-shadow:var(--shadow);
+      margin-bottom:20px;
+    }
+    .hero h1{
+      margin:0 0 7px;
+      font-size:clamp(28px,5vw,42px);
+    }
+    .hero p{margin:0;color:var(--muted)}
+
+    .section-title{
+      margin:30px 0 12px;
+      font-size:24px;
+    }
+
+    .dashboard-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:20px;
+    }
+    .stat{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+    .stat span{
+      display:block;
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:6px;
+    }
+    .stat strong{
+      font-size:24px;
+      color:var(--green-dark);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:18px;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:var(--shadow);
+    }
+    .card h3{
+      margin-top:0;
+      margin-bottom:14px;
+      font-size:20px;
+    }
+    .card p.note{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:-7px;
+    }
+
+    .form-group{margin-bottom:12px}
+    label{
+      display:block;
+      margin-bottom:6px;
+      font-weight:700;
+      font-size:14px;
+    }
+    input,textarea{
+      width:100%;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px 13px;
+      outline:none;
+      background:#fff;
+      color:var(--text);
+    }
+    textarea{min-height:105px;resize:vertical}
+    input:focus,textarea:focus{
+      border-color:#32aa69;
+      box-shadow:0 0 0 3px rgba(50,170,105,.12);
+    }
+
+    .btn{
+      border:0;
+      border-radius:12px;
+      padding:11px 14px;
+      font-weight:800;
+      background:var(--green);
+      color:#fff;
+      transition:.15s;
+    }
+    .btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+    .btn.secondary{background:#eaf5ee;color:var(--green-dark)}
+    .btn.danger{background:#fff0f0;color:var(--danger)}
+    .btn.full{width:100%}
+
+    .result{
+      margin-top:14px;
+      padding:14px;
+      border-radius:12px;
+      background:var(--green-light);
+      border:1px solid #ccebd8;
+      display:none;
+    }
+    .result.show{display:block}
+    .result-row{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:5px 0;
+    }
+    .result-row strong{color:var(--green-dark)}
+
+    .output{
+      white-space:pre-wrap;
+      background:#f8faf9;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:13px;
+      min-height:80px;
+      margin-top:12px;
+    }
+
+    .two-buttons{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:9px;
+      margin-top:10px;
+    }
+
+    .receipt{
+      background:#fff;
+      border:1px dashed #aebcb5;
+      border-radius:12px;
+      padding:16px;
+      margin-top:12px;
+      display:none;
+    }
+    .receipt.show{display:block}
+    .receipt-head{
+      text-align:center;
+      border-bottom:1px dashed #b9c5bf;
+      padding-bottom:10px;
+      margin-bottom:10px;
+    }
+    .receipt-head h4{margin:0;color:var(--green-dark);font-size:20px}
+    .receipt-line{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:5px 0;
+    }
+    .receipt-total{
+      border-top:1px dashed #b9c5bf;
+      margin-top:8px;
+      padding-top:10px;
+      font-size:18px;
+      font-weight:800;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:10px;
+    }
+    th,td{
+      text-align:left;
+      padding:10px 8px;
+      border-bottom:1px solid var(--border);
+      vertical-align:top;
+    }
+    th{font-size:13px;color:var(--muted)}
+    td{font-size:14px}
+    .table-wrap{overflow-x:auto}
+
+    .empty{
+      color:var(--muted);
+      text-align:center;
+      padding:18px 0 5px;
+    }
+
+    .premium{
+      background:linear-gradient(135deg,#10291d,#087f3e);
+      color:#fff;
+      border:0;
+    }
+    .premium h3{color:#fff}
+    .premium p{color:#dcefe4}
+    .badge{
+      display:inline-block;
+      background:#fff;
+      color:var(--green-dark);
+      padding:5px 9px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    footer{
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      padding:25px 18px 40px;
+    }
+
+    @media (max-width:850px){
+      .grid{grid-template-columns:1fr}
+      .dashboard-grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width:560px){
+      .container{padding-left:12px;padding-right:12px}
+      .card,.hero{padding:16px}
+      .two-buttons{grid-template-columns:1fr}
+      .brand-text strong{font-size:14px}
+      .brand-text small{font-size:10px}
+      .brand img{width:38px;height:38px}
+    }
+
+    @media print{
+      body *{visibility:hidden}
+      #receiptBox,#receiptBox *{visibility:visible}
+      #receiptBox{
+        display:block !important;
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        box-shadow:none;
+        border:0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <img src="icon-192.png" alt="JB SMART SELLER logo">
+        <div class="brand-text">
+          <strong>JB SMART SELLER</strong>
+          <small>Sell smarter. Track better.</small>
+        </div>
+      </div>
+      <button class="btn secondary" onclick="goTo('dashboard')">Dashboard</button>
+    </div>
+
+    <nav aria-label="Main navigation">
+      <button onclick="goTo('calculator')">Profit</button>
+      <button onclick="goTo('advert')">Advert</button>
+      <button onclick="goTo('whatsapp')">WhatsApp</button>
+      <button onclick="goTo('receipt')">Receipt</button>
+      <button onclick="goTo('sales')">Sales</button>
+      <button onclick="goTo('customers')">Customers</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero" id="dashboard">
+      <h1>Grow your business with JB SMART SELLER</h1>
+      <p>Calculate profit, create adverts, prepare WhatsApp messages, issue receipts and keep simple sales records — all from one app.</p>
+
+      <div class="dashboard-grid">
+        <div class="stat">
+          <span>Total Sales</span>
+          <strong id="totalSales">₦0</strong>
+        </div>
+        <div class="stat">
+          <span>Total Profit</span>
+          <strong id="totalProfit">₦0</strong>
+        </div>
+        <div class="stat">
+          <span>Orders</span>
+          <strong id="totalOrders">0</strong>
+        </div>
+      </div>
+    </section>
+
+    <h2 class="section-title" id="calculator">Profit Calculator</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Calculate your selling price</h3>
+        <div class="form-group">
+          <label for="calcProduct">Product Name</label>
+          <input id="calcProduct" placeholder="e.g. Sneakers">
+        </div>
+        <div class="form-group">
+          <label for="calcCost">Cost Price (₦)</label>
+          <input id="calcCost" type="number" min="0" step="0.01" placeholder="8000">
+        </div>
+        <div class="form-group">
+          <label for="calcProfit">Desired Profit (%)</label>
+          <input id="calcProfit" type="number" min="0" step="0.1" value="30">
+        </div>
+        <button class="btn full" onclick="calculateProfit()">Calculate</button>
+
+        <div class="result" id="profitResult">
+          <div class="result-row"><span>Product</span><strong id="resultProduct">-</strong></div>
+          <div class="result-row"><span>Cost Price</span><strong id="resultCost">₦0</strong></div>
+          <div class="result-row"><span>Profit</span><strong id="resultProfit">₦0</strong></div>
+          <div class="result-row"><span>Selling Price</span><strong id="resultSelling">₦0</strong></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Quick selling-price example</h3>
+        <p class="note">Example: Sneakers cost ₦8,000 and your target profit is 30%.</p>
+        <div class="result show">
+          <div class="result-row"><span>Cost</span><strong>₦8,000</strong></div>
+          <div class="result-row"><span>30% Profit</span><strong>₦2,400</strong></div>
+          <div class="result-row"><span>Selling Price</span><strong>₦10,400</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title" id="advert">Advert Generator</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Create a product advert</h3>
+        <div class="form-group">
+          <label for="advertProduct">Product Name</label>
+          <input id="advertProduct" placeholder="e.g. Classic Sneakers">
+        </div>
+        <div class="form-group">
+          <label for="advertPrice">Price (₦)</label>
+          <input id="advertPrice" type="number" min="0" step="0.01" placeholder="10400">
+        </div>
+        <div class="form-group">
+          <label for="advertDescription">Product Description</label>
+          <textarea id="advertDescription" placeholder="Comfortable, stylish and durable sneakers for everyday use."></textarea>
+        </div>
+        <button class="btn full" onclick="generateAdvert()">Generate Advert</button>
+        <div class="output" id="advertOutput"></div>
+        <div class="two-buttons">
+          <button class="btn secondary" onclick="copyText('advertOutput')">Copy Advert</button>
+          <button class="btn" onclick="shareText('advertOutput','JB SMART SELLER Advert')">Share</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Advert idea</h3>
+        <p class="note">A clear advert should tell the customer what the product is, why it is useful, the price and how to order.</p>
+        <div class="output">🔥 NEW ARRIVAL!
+
+Get your Classic Sneakers today.
+
+✅ Quality design
+✅ Comfortable fit
+✅ Great for everyday use
+
+Price: ₦10,400
+
+Send us a message now to place your order.</div>
+      </div>
+    </div>
+
+    <h2 class="section-title" id="whatsapp">WhatsApp Sales Message</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Create a customer message</h3>
+        <div class="form-group">
+          <label for="waCustomer">Customer Name</label>
+          <input id="waCustomer" placeholder="e.g. John">
+        </div>
+        <div class="form-group">
+          <label for="waProduct">Product</label>
+          <input id="waProduct" placeholder="e.g. Sneakers">
+        </div>
+        <div class="form-group">
+          <label for="waPrice">Price (₦)</label>
+          <input id="waPrice" type="number" min="0" step="0.01" placeholder="10400">
+        </div>
+        <button class="btn full" onclick="generateWhatsApp()">Create Message</button>
+        <div class="output" id="waOutput"></div>
+        <div class="two-buttons">
+          <button class="btn secondary" onclick="copyText('waOutput')">Copy Message</button>
+          <button class="btn" onclick="shareText('waOutput','JB SMART SELLER WhatsApp Message')">Share</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Ready-to-send style</h3>
+        <div class="output">Hello John 👋
+
+Your Sneakers are available for ₦10,400.
+
+Thank you for choosing us. Please let me know when you are ready to confirm your order. 🙏</div>
+      </div>
+    </div>
+
+    <h2 class="section-title" id="receipt">Receipt Generator</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Create a receipt</h3>
+        <div class="form-group">
+          <label for="receiptCustomer">Customer Name</label>
+          <input id="receiptCustomer" placeholder="e.g. John">
+        </div>
+        <div class="form-group">
+          <label for="receiptProduct">Product</label>
+          <input id="receiptProduct" placeholder="e.g. Sneakers">
+        </div>
+        <div class="form-group">
+          <label for="receiptQty">Quantity</label>
+          <input id="receiptQty" type="number" min="1" step="1" value="1">
+        </div>
+        <div class="form-group">
+          <label for="receiptPrice">Unit Price (₦)</label>
+          <input id="receiptPrice" type="number" min="0" step="0.01" placeholder="10400">
+        </div>
+        <button class="btn full" onclick="generateReceipt()">Generate Receipt</button>
+        <div class="two-buttons">
+          <button class="btn secondary" onclick="window.print()">Print Receipt</button>
+          <button class="btn" onclick="downloadReceiptText()">Save Receipt</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="receipt" id="receiptBox">
+          <div class="receipt-head">
+            <h4>JB SMART SELLER</h4>
+            <div>Sales Receipt</div>
+          </div>
+          <div class="receipt-line"><span>Customer</span><strong id="receiptOutCustomer">-</strong></div>
+          <div class="receipt-line"><span>Product</span><strong id="receiptOutProduct">-</strong></div>
+          <div class="receipt-line"><span>Quantity</span><strong id="receiptOutQty">0</strong></div>
+          <div class="receipt-line"><span>Unit Price</span><strong id="receiptOutUnit">₦0</strong></div>
+          <div class="receipt-line receipt-total"><span>Total</span><strong id="receiptOutTotal">₦0</strong></div>
+          <div style="text-align:center;margin-top:15px;color:#6c7a74;font-size:12px">Thank you for your business.</div>
+        </div>
+        <div class="empty" id="receiptEmpty">Your receipt will appear here.</div>
+      </div>
+    </div>
+
+    <h2 class="section-title" id="sales">Sales Tracker</h2>
+    <div class="card">
+      <h3>Add a sale</h3>
+      <div class="grid">
+        <div>
+          <div class="form-group">
+            <label for="saleProduct">Product</label>
+            <input id="saleProduct" placeholder="e.g. Sneakers">
+          </div>
+          <div class="form-group">
+            <label for="saleCustomer">Customer</label>
+            <input id="saleCustomer" placeholder="e.g. John">
+          </div>
+        </div>
+        <div>
+          <div class="form-group">
+            <label for="saleCost">Cost Price (₦)</label>
+            <input id="saleCost" type="number" min="0" step="0.01" placeholder="8000">
+          </div>
+          <div class="form-group">
+            <label for="saleSelling">Selling Price (₦)</label>
+            <input id="saleSelling" type="number" min="0" step="0.01" placeholder="10400">
+          </div>
+        </div>
+      </div>
+      <button class="btn" onclick="addSale()">Add Sale</button>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Product</th><th>Customer</th><th>Cost</th><th>Sale</th><th>Profit</th><th></th></tr>
+          </thead>
+          <tbody id="salesBody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="salesEmpty">No sales recorded yet.</div>
+    </div>
+
+    <h2 class="section-title" id="customers">Customer Records</h2>
+    <div class="card">
+      <h3>Add a customer</h3>
+      <div class="grid">
+        <div>
+          <div class="form-group">
+            <label for="customerName">Customer Name</label>
+            <input id="customerName" placeholder="e.g. John">
+          </div>
+        </div>
+        <div>
+          <div class="form-group">
+            <label for="customerPhone">Phone Number</label>
+            <input id="customerPhone" placeholder="e.g. 08012345678">
+          </div>
+        </div>
+      </div>
+      <button class="btn" onclick="addCustomer()">Save Customer</button>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Phone</th><th>Added</th><th></th></tr>
+          </thead>
+          <tbody id="customersBody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="customersEmpty">No customers saved yet.</div>
+    </div>
+
+    <h2 class="section-title">Premium</h2>
+    <div class="card premium">
+      <span class="badge">COMING SOON</span>
+      <h3>JB SMART SELLER Premium</h3>
+      <p>Future paid features can include advanced reports, more customer tools, cloud backup, business branding and other seller-focused tools.</p>
+      <button class="btn secondary" onclick="showPremium()">View Premium</button>
+    </div>
+  </main>
+
+  <footer>© <span id="year"></span> JB SMART SELLER. Built for smarter selling.</footer>
+
+  <script>
+    const SALES_KEY = "jbSales";
+    const CUSTOMERS_KEY = "jbCustomers";
+    let sales = JSON.parse(localStorage.getItem(SALES_KEY) || "[]");
+    let customers = JSON.parse(localStorage.getItem(CUSTOMERS_KEY) || "[]");
+
+    function money(value){
+      const n = Number(value) || 0;
+      return n.toLocaleString("en-NG", {style:"currency",currency:"NGN",maximumFractionDigits:2});
+    }
+
+    function esc(value){
+      return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function goTo(id){
+      document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"});
+    }
+
+    function calculateProfit(){
+      const product = document.getElementById("calcProduct").value.trim() || "Product";
+      const cost = Number(document.getElementById("calcCost").value);
+      const percent = Number(document.getElementById("calcProfit").value);
+      if(!Number.isFinite(cost) || cost < 0){alert("Please enter a valid cost price.");return;}
+      if(!Number.isFinite(percent) || percent < 0){alert("Please enter a valid profit percentage.");return;}
+      const profit = cost * (percent/100);
+      const selling = cost + profit;
+      document.getElementById("resultProduct").textContent = product;
+      document.getElementById("resultCost").textContent = money(cost);
+      document.getElementById("resultProfit").textContent = money(profit);
+      document.getElementById("resultSelling").textContent = money(selling);
+      document.getElementById("profitResult").classList.add("show");
+    }
+
+    function generateAdvert(){
+      const product = document.getElementById("advertProduct").value.trim();
+      const price = Number(document.getElementById("advertPrice").value);
+      const description = document.getElementById("advertDescription").value.trim();
+      if(!product || !Number.isFinite(price) || price < 0){alert("Enter the product name and a valid price.");return;}
+      const text = `🔥 NEW ARRIVAL!\n\nGet your ${product} today.\n\n✅ Quality product\n✅ Great value\n✅ Available now\n\n${description ? description + "\n\n" : ""}Price: ${money(price)}\n\nSend us a message now to place your order.`;
+      document.getElementById("advertOutput").textContent = text;
+    }
+
+    function generateWhatsApp(){
+      const customer = document.getElementById("waCustomer").value.trim() || "Customer";
+      const product = document.getElementById("waProduct").value.trim() || "Product";
+      const price = Number(document.getElementById("waPrice").value);
+      if(!Number.isFinite(price) || price < 0){alert("Please enter a valid price.");return;}
+      const text = `Hello ${customer} 👋\n\nYour ${product} is available for ${money(price)}.\n\nThank you for choosing JB SMART SELLER. Please let me know when you are ready to confirm your order. 🙏`;
+      document.getElementById("waOutput").textContent = text;
+    }
+
+    async function copyText(id){
+      const el = document.getElementById(id);
+      const text = (el?.innerText || el?.value || "").trim();
+      if(!text){alert("There is nothing to copy yet.");return;}
+      try{await navigator.clipboard.writeText(text);alert("Copied successfully.");}
+      catch(error){alert("Copy failed on this browser. Please select the text and copy it manually.");}
+    }
+
+    async function shareText(id,title){
+      const el = document.getElementById(id);
+      const text = (el?.innerText || el?.value || "").trim();
+      if(!text){alert("Generate the text first.");return;}
+      if(navigator.share){try{await navigator.share({title,text});}catch(error){}}
+      else{await copyText(id);}
+    }
+
+    let lastReceipt = "";
+
+    function generateReceipt(){
+      const customer = document.getElementById("receiptCustomer").value.trim() || "Customer";
+      const product = document.getElementById("receiptProduct").value.trim() || "Product";
+      const qty = Number(document.getElementById("receiptQty").value);
+      const price = Number(document.getElementById("receiptPrice").value);
+      if(!Number.isFinite(qty) || qty < 1 || !Number.isInteger(qty)){alert("Quantity must be a whole number of at least 1.");return;}
+      if(!Number.isFinite(price) || price < 0){alert("Please enter a valid unit price.");return;}
+      const total = qty * price;
+      document.getElementById("receiptOutCustomer").textContent = customer;
+      document.getElementById("receiptOutProduct").textContent = product;
+      document.getElementById("receiptOutQty").textContent = qty;
+      document.getElementById("receiptOutUnit").textContent = money(price);
+      document.getElementById("receiptOutTotal").textContent = money(total);
+      document.getElementById("receiptBox").classList.add("show");
+      document.getElementById("receiptEmpty").style.display = "none";
+      lastReceipt = ["JB SMART SELLER","SALES RECEIPT","-------------------------",`Customer: ${customer}`,`Product: ${product}`,`Quantity: ${qty}`,`Unit Price: ${money(price)}`,`TOTAL: ${money(total)}`,"-------------------------","Thank you for your business."].join("\n");
+    }
+
+    function downloadReceiptText(){
+      if(!lastReceipt){alert("Generate a receipt first.");return;}
+      const blob = new Blob([lastReceipt],{type:"text/plain;charset=utf-8"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "JB-SMART-SELLER-Receipt.txt";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function addSale(){
+      const product = document.getElementById("saleProduct").value.trim();
+      const customer = document.getElementById("saleCustomer").value.trim() || "Walk-in Customer";
+      const cost = Number(document.getElementById("saleCost").value);
+      const selling = Number(document.getElementById("saleSelling").value);
+      if(!product || !Number.isFinite(cost) || cost < 0 || !Number.isFinite(selling) || selling < 0){alert("Please enter the product, cost price and selling price.");return;}
+      sales.unshift({id:Date.now(),date:new Date().toLocaleDateString("en-NG"),product,customer,cost,selling,profit:selling-cost});
+      localStorage.setItem(SALES_KEY,JSON.stringify(sales));
+      document.getElementById("saleProduct").value = "";
+      document.getElementById("saleCustomer").value = "";
+      document.getElementById("saleCost").value = "";
+      document.getElementById("saleSelling").value = "";
+      renderSales();updateDashboard();alert("Sale added successfully.");
+    }
+
+    function deleteSale(id){
+      sales = sales.filter(item => item.id !== id);
+      localStorage.setItem(SALES_KEY,JSON.stringify(sales));
+      renderSales();updateDashboard();
+    }
+
+    function renderSales(){
+      const body = document.getElementById("salesBody");
+      const empty = document.getElementById("salesEmpty");
+      body.innerHTML = "";
+      if(!sales.length){empty.style.display="block";return;}
+      empty.style.display="none";
+      for(const sale of sales){
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${esc(sale.date)}</td><td>${esc(sale.product)}</td><td>${esc(sale.customer)}</td><td>${money(sale.cost)}</td><td>${money(sale.selling)}</td><td>${money(sale.profit)}</td><td><button class="btn danger" onclick="deleteSale(${sale.id})">Delete</button></td>`;
+        body.appendChild(row);
+      }
+    }
+
+    function updateDashboard(){
+      const totalSales = sales.reduce((sum,item)=>sum+Number(item.selling||0),0);
+      const totalProfit = sales.reduce((sum,item)=>sum+Number(item.profit||0),0);
+      document.getElementById("totalSales").textContent = money(totalSales);
+      document.getElementById("totalProfit").textContent = money(totalProfit);
+      document.getElementById("totalOrders").textContent = sales.length;
+    }
+
+    function addCustomer(){
+      const name = document.getElementById("customerName").value.trim();
+      const phone = document.getElementById("customerPhone").value.trim();
+      if(!name || !phone){alert("Please enter the customer name and phone number.");return;}
+      customers.unshift({id:Date.now(),name,phone,added:new Date().toLocaleDateString("en-NG")});
+      localStorage.setItem(CUSTOMERS_KEY,JSON.stringify(customers));
+      document.getElementById("customerName").value = "";
+      document.getElementById("customerPhone").value = "";
+      renderCustomers();alert("Customer saved successfully.");
+    }
+
+    function deleteCustomer(id){
+      customers = customers.filter(item=>item.id!==id);
+      localStorage.setItem(CUSTOMERS_KEY,JSON.stringify(customers));
+      renderCustomers();
+    }
+
+    function renderCustomers(){
+      const body = document.getElementById("customersBody");
+      const empty = document.getElementById("customersEmpty");
+      body.innerHTML = "";
+      if(!customers.length){empty.style.display="block";return;}
+      empty.style.display="none";
+      for(const customer of customers){
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${esc(customer.name)}</td><td>${esc(customer.phone)}</td><td>${esc(customer.added)}</td><td><button class="btn danger" onclick="deleteCustomer(${customer.id})">Delete</button></td>`;
+        body.appendChild(row);
+      }
+    }
+
+    function showPremium(){
+      alert("Premium features are coming later. We will add useful paid tools after the core app is finished and tested.");
+    }
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+    renderSales();
+    renderCustomers();
+    updateDashboard();
+  </script>
+</body>
+</html>

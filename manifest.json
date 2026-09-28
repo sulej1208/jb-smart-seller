@@ -1,0 +1,22 @@
+{
+  "name": "JB SMART SELLER",
+  "short_name": "JB SELLER",
+  "description": "Simple tools to help Nigerian sellers manage sales, profits, customers and adverts.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#087f3e",
+  "theme_color": "#087f3e",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
